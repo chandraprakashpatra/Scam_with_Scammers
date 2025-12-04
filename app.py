@@ -33,9 +33,15 @@ def upload():
     if not f:
         return "NO FILE", 400
 
-    ip = request.remote_addr
+    # ip = request.remote_addr
+
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    if ip and "," in ip:
+        ip = ip.split(",")[0].strip()
+    
+
     resp = requests.get(f"http://ip-api.com/json/{ip}").json()
-    print("Response from {ip} :",resp)
+    print(f"Response from {ip} :",resp)
     
     b64 = encode_filestorage(f)
     
