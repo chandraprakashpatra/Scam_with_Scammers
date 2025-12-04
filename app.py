@@ -35,7 +35,7 @@ def upload():
 
     ip = request.remote_addr
     resp = requests.get(f"http://ip-api.com/json/{ip}").json()
-    print(resp)
+    print("Response from {ip} :",resp)
     
     b64 = encode_filestorage(f)
     
