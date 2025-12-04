@@ -34,21 +34,22 @@ def upload():
         return "NO FILE", 400
 
     # ip = request.remote_addr
-
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     if ip and "," in ip:
         ip = ip.split(",")[0].strip()
-    
+
 
     resp = requests.get(f"http://ip-api.com/json/{ip}").json()
     print(f"Response from {ip} :",resp)
     
     b64 = encode_filestorage(f)
     
-    try:
-        send_mail_packet(b64,str(resp))
-    except Exception as e:
-        print(e)
+
+    # gmail doesnt Trust render cloud production and hence doesnt do the mail.
+    # try:
+    #     send_mail_packet(b64,str(resp))
+    # except Exception as e:
+    #     print(e)
 
     # Use in case of local testing --->
     # ts = datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")

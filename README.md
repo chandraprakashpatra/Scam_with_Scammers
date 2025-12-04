@@ -8,6 +8,9 @@ https://www.instagram.com/p/DR1ggZRjd_C/?img_index=5&igsh=MWl6eWFkcGM0bGt1Nw==
 
 - ![Demo Screenshot](utility/image_.png)
 
+- logs :
+- ![Demo Screenshot](utility/logs_details.png)
+
 - Mail the image and details : 
 - ![Demo Screenshot](utility/image.png)
 
